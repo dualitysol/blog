@@ -1,0 +1,31 @@
+version: '3.7'
+
+x-aliases:
+  - &logging
+    logging:
+      driver: json-file
+      options:
+        max-file: '5'
+        max-size: 20m
+  - &api_common_env
+    NODE_ENV: 'development'
+
+services:
+  api:
+    image: blog-backend
+    environment:
+      <<: *api_common_env
+    ports:
+      - "3001:3001"
+    <<: *logging
+    restart: unless-stopped
+
+  frontend:
+    image: blog-frontend
+    ports:
+      - "8080:8080"
+    depends_on:
+      - api
+    <<: *logging
+    restart: unless-stopped
+    tty: true

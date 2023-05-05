@@ -10,8 +10,9 @@
     "lint:check": "eslint .",
     "lint:fix": "eslint --fix .",
     "babel:node": "./node_modules/.bin/babel-node --presets=@babel/env",
-    "dev": "nodemon index.js",
-    "start": "npm index.js"
+    "dev": "npm run check && nodemon index.js",
+    "check": "npm run format:write && npm run lint:check",
+    "start": "npm run check && node index.js"
   },
   "author": "",
   "license": "ISC",
@@ -34,5 +35,8 @@
     "jest": "^29.5.0",
     "lint-staged": "^13.2.2",
     "prettier": "^2.8.8"
+  },
+  "gitHooks": {
+    "pre-commit": "lint-staged"
   }
 }

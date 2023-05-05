@@ -1,10 +1,33 @@
 "use strict";
 
 const { DataTypes, Model } = require("sequelize");
-const { hash } = require("bcrypt");
+const { hash, compare } = require("bcrypt");
 const database = require("../database");
 
-class User extends Model {}
+class User extends Model {
+  /**
+   * @param { String } value - password received from the front-end to auth the user
+   * @returns { Boolean } is hash of the provided password mathces with pass in DB
+   */
+  async comparePassword(password = "rand pass") {
+    return compare(password, this.password);
+  }
+
+  /**
+   * @param { String } username
+   * @param { String } email
+   * @param { String } password
+   *
+   * @override password as hash of the provided password
+   */
+  static async create(payload) {
+    if (payload.password) {
+      payload.password = await hash(payload.password, 10);
+    }
+
+    return super.create(payload);
+  }
+}
 
 User.init(
   {
@@ -42,9 +65,12 @@ User.init(
     },
     password: {
       type: DataTypes.STRING,
-      async set(value) {
-        if (!!value === false) return;
-        this.setDataValue("password", await hash(value, 10));
+      allowNull: false,
+      validate: {
+        notEmpty: {
+          args: true,
+          msg: "Password is required",
+        },
       },
     },
   },
