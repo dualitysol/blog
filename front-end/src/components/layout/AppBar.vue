@@ -22,9 +22,9 @@
       variant="tonal"
     >
       <v-icon icon="mdi-login"></v-icon>
-      Sign In
+      Login
     </v-btn>
-    <v-btn id="logout-link" v-else stacked variant="tonal">
+    <v-btn id="logout-link" v-else stacked variant="tonal" @click="logout">
       <v-icon icon="mdi-logout"></v-icon>
       Logout
     </v-btn>
@@ -45,6 +45,10 @@ export default defineComponent({
     },
     goToAddPost() {
       this.$router.push("/add-post");
+    },
+    logout() {
+      this.$store.dispatch("logOut");
+      this.$router.push("/login");
     },
   },
 
