@@ -7,13 +7,7 @@ axios.defaults.baseURL = "http://localhost:3001/";
  * @param { AxiosError }
  * @return { viod }
  */
-export const initErrorHandler = ({ $router: router, $store: store }, error) => {
-  if (error.response?.status === 401) {
-    store.dispatch("logOut");
-    return;
-  }
-  if (error.response?.status === 403) return router.push("forbidden");
-  if (error.response?.status === 404) return router.push("not-found");
+export const initErrorHandler = ({ $store: store }, error) => {
   store.dispatch("handleAxiosError", error);
 };
 
@@ -32,7 +26,18 @@ export async function register(username, email, password) {
   return { userData, token };
 }
 
+export async function login(username, password) {
+  const {
+    data: { userData, token },
+  } = await axios.post("/user/signin", {
+    username,
+    password,
+  });
+  return { userData, token };
+}
+
 export default {
   setToken,
   register,
+  login,
 };

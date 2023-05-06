@@ -15,13 +15,29 @@ const UserController = {
         req.body.password
       );
 
-      return res
-        .status(201)
-        .json({
-          message: "Account has been registered succesfully",
-          token,
-          userData,
-        });
+      return res.status(201).json({
+        message: "Account has been registered succesfully",
+        token,
+        userData,
+      });
+    } catch ({ message, status }) {
+      return res.status(status || 500).json({ message });
+    }
+  },
+
+  SignIn: async (req, res) => {
+    try {
+      const { username, password } = req.body;
+      const { userData, token } = await userService.Authenticate(
+        username,
+        password
+      );
+
+      return res.status(200).json({
+        message: "Auth successful!",
+        token,
+        userData,
+      });
     } catch ({ message, status }) {
       return res.status(status || 500).json({ message });
     }

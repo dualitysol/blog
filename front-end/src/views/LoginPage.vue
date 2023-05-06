@@ -1,18 +1,18 @@
 <template>
   <v-container>
     <v-form>
-      <register-form />
+      <login-form />
     </v-form>
   </v-container>
 </template>
 
 <script>
-import RegisterForm from "../components/auth/RegisterForm.vue";
+import LoginForm from "../components/auth/LoginForm.vue";
 import { defineComponent } from "vue";
 
 export default defineComponent({
   components: {
-    RegisterForm,
+    LoginForm,
   },
 });
 </script>

@@ -1,4 +1,4 @@
-const pattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])(?=.{8,})/;
+// const pattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])(?=.{8,})/;
 
 export default {
   emailRules: [
@@ -14,13 +14,13 @@ export default {
     },
   ],
   passwordRules: [
-    (value = "") => !!value || "Password is required.",
-    (value = "") => {
-      return (
-        pattern.test(value) ||
-        "Min. 8 characters with at least one capital letter, a number and a special character."
-      );
-    },
+    (value = "") => !!value || "The Password is required and cannot be empty",
+    // (value = "") => {
+    //   return (
+    //     pattern.test(value) ||
+    //     "Min. 8 characters with at least one capital letter, a number and a special character."
+    //   );
+    // },
   ],
   usernameRules: [
     (value = "") => !!value || "The username is required and cannot be empty",

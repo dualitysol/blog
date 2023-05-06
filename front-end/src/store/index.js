@@ -1,9 +1,14 @@
 import { createStore } from "vuex";
 import api from "@/api";
-import { getLocalUserData, storeCredentials } from "./local";
+import {
+  getLocalUserData,
+  getToken,
+  storeCredentials,
+  clearLocalStorage,
+} from "./local";
 
 const userData = getLocalUserData();
-const token = localStorage.getItem("token");
+const token = getToken();
 
 if (token) {
   api.setToken(token);
@@ -41,7 +46,7 @@ const store = createStore({
     },
 
     logout(state) {
-      localStorage.clear();
+      clearLocalStorage();
       state.authenticated = false;
       state.userData = {};
     },
@@ -63,12 +68,11 @@ const store = createStore({
       }, 4000);
     },
 
-    async authenticate({ commit }, { user, token, remember }) {
+    async authenticate({ commit }, { user, token }) {
       if (token) {
         api.setToken(token);
         commit("authenticate", user);
-
-        if (remember) storeCredentials(token, user);
+        storeCredentials(token, user);
 
         return true;
       }
