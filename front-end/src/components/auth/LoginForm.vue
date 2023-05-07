@@ -23,6 +23,15 @@
           @click:append-inner="showPassword = !showPassword"
           :rules="passwordRules"
         ></v-text-field>
+
+        <v-btn
+          id="forgot-password-link"
+          density="compact"
+          variant="tonal"
+          @click="$router.push('forgot-password')"
+        >
+          Forgot Password
+        </v-btn>
       </v-form>
     </v-container>
 

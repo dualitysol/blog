@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "jest",
+    "test:coverage": "jest --collect-coverage",
     "format:check": "prettier --check .",
     "format:write": "prettier --write .",
     "lint:check": "eslint .",
@@ -24,6 +25,7 @@
     "jsonwebtoken": "^9.0.0",
     "morgan": "^1.10.0",
     "multer": "^1.4.5-lts.1",
+    "nodemailer": "^6.9.1",
     "sequelize": "^6.31.1",
     "sqlite3": "^5.1.6"
   },

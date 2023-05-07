@@ -20,6 +20,11 @@ const routes = [
     component: () =>
       import(/* webpackChunkName: "about" */ "../views/LoginPage.vue"),
   },
+  {
+    path: "/forgot-password",
+    name: "forgot-password",
+    component: () => import("../views/ForgotPassword.vue"),
+  },
 ];
 
 const router = createRouter({
@@ -27,13 +32,16 @@ const router = createRouter({
   routes,
 });
 
-router.beforeEach((to) => {
+router.beforeEach((to, from, next) => {
   const { isAuthenticated } = store.getters;
-  const toLogin = to.name === "signin";
-  const toRegister = to.name === "signup";
-  const toAuth = toLogin || toRegister;
+  const toLogin = to.path === "/login";
+  const toRegister = to.path === "/registration";
+  const toRestorePassword = to.path === "/forgot-password";
+  const toAuth = toLogin || toRegister || toRestorePassword;
+  console.log(toAuth, isAuthenticated, to);
+  if (toAuth) return next();
 
-  if (!isAuthenticated && !toAuth) {
+  if (!isAuthenticated) {
     const alert = {
       type: "error",
       title: "Access Error",
@@ -42,8 +50,8 @@ router.beforeEach((to) => {
 
     store.dispatch("emitAlert", alert);
 
-    return { name: "signin" };
-  }
+    next({ name: "signin" });
+  } else next();
 });
 
 export default router;

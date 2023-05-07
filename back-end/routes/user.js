@@ -6,4 +6,6 @@ router.post("/signup", UserController.SignUp);
 
 router.post("/signin", UserController.SignIn);
 
+router.post("/forgot-password", UserController.ForgotPassword);
+
 module.exports = router;

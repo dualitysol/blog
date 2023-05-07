@@ -36,6 +36,13 @@ export async function login(username, password) {
   return { userData, token };
 }
 
+export async function forgotPassword(email) {
+  const {
+    data: { message },
+  } = await axios.post("/user/forgot-password", { email });
+  return message;
+}
+
 export default {
   setToken,
   register,

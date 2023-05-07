@@ -1,9 +1,9 @@
 const jwt = require("jsonwebtoken");
 
 class UserService {
-  constructor(model, logger) {
+  constructor(model, services) {
     this.model = model;
-    this.logger = logger;
+    this.services = services;
   }
 
   /**
@@ -58,6 +58,39 @@ class UserService {
     const token = jwt.sign(userData, process.env.JWT_KEY, { expiresIn: "1h" });
 
     return { userData, token };
+  }
+
+  /**
+   * @param { String } email of user to reset password
+   */
+  async ForgotPassword(email) {
+    const filter = { where: { email } };
+    const user = !!email && (await this.model.findOne(filter));
+
+    if ((!!user && !!user.id) === false) {
+      const err = new Error("No account with that email address exists.");
+
+      err.status = 404;
+
+      throw err;
+    }
+
+    const userData = {
+      id: user.id,
+      username: user.username,
+      email: user.email,
+      reset: true,
+    };
+    const token = jwt.sign(userData, process.env.JWT_KEY, { expiresIn: "5m" });
+    const resetUrl = `${process.env.BASE_URL}/reset-password?token=${token}`;
+
+    try {
+      await this.services.mailService.sendResetUrl(user.email, resetUrl);
+    } catch (error) {
+      throw new Error("Cannot sent reset password link to the email");
+    }
+
+    return "Reset password link was successfully sent.";
   }
 }
 

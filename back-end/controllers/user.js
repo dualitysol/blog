@@ -1,7 +1,14 @@
 const UserModel = require("../models/user");
+const MailService = require("../services/mail");
 const UserService = require("../services/user");
 
-const userService = new UserService(UserModel, null);
+const mailService = new MailService(
+  process.env.MAIL_HOST,
+  process.env.MAIL_USER,
+  process.env.MAIL_PASS
+);
+const services = { mailService };
+const userService = new UserService(UserModel, services);
 
 const UserController = {
   /**
@@ -38,6 +45,17 @@ const UserController = {
         token,
         userData,
       });
+    } catch ({ message, status }) {
+      return res.status(status || 500).json({ message });
+    }
+  },
+
+  ForgotPassword: async (req, res) => {
+    try {
+      const { email } = req.body;
+      const message = await userService.ForgotPassword(email);
+
+      return res.status(200).json({ message });
     } catch ({ message, status }) {
       return res.status(status || 500).json({ message });
     }
