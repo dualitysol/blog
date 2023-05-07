@@ -1,5 +1,6 @@
 const registerRoute = "signup";
 const loginRoute = "signin";
+const forgotPasswordRoute = "forgot-route";
 const testUsername = "asdf.asdf";
 const testEmail = "asdf.asdf@example.com";
 const testPassword = "Asdf@1234";
@@ -30,6 +31,17 @@ const loginHandler = (req) => {
   }));
 }
 
+const forgotPasswordHandler = (req) => {
+  const correctEmail = req.body.email === testEmail;
+
+  if (correctEmail) return req.reply({ message: "Success" });
+
+  req.reply((res) => res.send({
+    status: 404,
+    message: "No account with that email address exists."
+  }));
+}
+
 const initAuthRoute = (authRoute, requestName, response = defaultHandler) => {
   cy.server();
   cy.intercept(
@@ -46,4 +58,6 @@ module.exports = {
   loginRoute,
   initAuthRoute,
   loginHandler,
+  forgotPasswordRoute,
+  forgotPasswordHandler,
 }

@@ -55,12 +55,16 @@ const mockModel = {
   })
 };
 
+const mockMailService = {
+  sendResetUrl: jest.fn(),
+};
+
 jest.mock("jsonwebtoken", () => ({
   sign: jest.fn(() => testToken),
 }));
 
 describe("User Service", () => {
-  const userService = new UserService(mockModel, null);
+  const userService = new UserService(mockModel, { mailService: mockMailService });
 
   describe("Create Account", () => {
     test("Creates account with provided email and password", async () => {
@@ -131,8 +135,8 @@ describe("User Service", () => {
       expect(token).toBe(testToken);
       expect(jwt.sign.mock.calls).toHaveLength(2);
       expect(jwt.sign.mock.calls[0][0]).toEqual(testUserData);
-      expect(jwt.sign.mock.calls[0][1]).toBe(process.env.JWT_KEY);
-      expect(jwt.sign.mock.calls[0][2]).toEqual({ expiresIn: "1h" });
+      expect(jwt.sign.mock.calls[1][1]).toBe(process.env.JWT_KEY);
+      expect(jwt.sign.mock.calls[1][2]).toEqual({ expiresIn: "1h" });
     })
 
     test("Throws error if payload is incorrect", async () => {
@@ -150,6 +154,39 @@ describe("User Service", () => {
         expect(jwt.sign.mock.calls).toHaveLength(2);
         expect(message).toBe("Invalid username/password, Try again!");
         expect(status).toBe(401);
+      }
+    })
+  })
+
+  describe("ForgotPassword", () => {
+    test("Sends reset password link to email if user exists", async () => {
+      mockModel.findOne.mockReturnValueOnce(new MockUser(1, testUsername, testEmail, testPassword));
+      await userService.ForgotPassword(testEmail);
+
+      const testUserData = {
+        id: 1,
+        username: testUsername,
+        email: testEmail,
+        reset: true,
+      };
+      const testUrl = `${process.env.BASE_URL}/reset-password?token=${testToken}`;
+
+      expect(jwt.sign.mock.calls).toHaveLength(3);
+      expect(jwt.sign.mock.calls[2][0]).toEqual(testUserData);
+      expect(jwt.sign.mock.calls[2][1]).toBe(process.env.JWT_KEY);
+      expect(jwt.sign.mock.calls[2][2]).toEqual({ expiresIn: "5m" });
+      expect(mockMailService.sendResetUrl.mock.calls).toHaveLength(1);
+      expect(mockMailService.sendResetUrl.mock.calls[0][0]).toEqual(testEmail);
+      expect(mockMailService.sendResetUrl.mock.calls[0][1]).toEqual(testUrl);
+    })
+
+    test("Throws error if user does not exist", async () => {
+      mockModel.findOne.mockReturnValueOnce(null);
+      try {
+        await userService.ForgotPassword(testEmail);
+      } catch ({ message, status }) {
+        expect(message).toBe("No account with that email address exists.");
+        expect(status).toBe(404);
       }
     })
   })

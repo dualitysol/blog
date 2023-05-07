@@ -48,7 +48,7 @@ module.exports = class Page {
   }
 
   checkPageUrl(pageName) {
-    const url = this.baseUrl + "/" + pageName.toLowerCase();
+    const url = this.baseUrl + "/" + pageName.toLowerCase().replace(" ", "-");
     cy.url().should("be.equal", url);
   }
 
