@@ -7,7 +7,7 @@ const {
 } = require("cypress-cucumber-preprocessor/steps");
 const {
   loginRoute,
-  initAuthRoute,
+  initUserRoute,
 } = require("../mocks");
 
 const Page = require("../base-spec-class.js");
@@ -16,11 +16,12 @@ const page = new Page("http://localhost:8080");
 const loginRequest = "login-request";
 
 Given("I am a logged in user", () => {
-  initAuthRoute(loginRoute, loginRequest);
+  initUserRoute(loginRoute, loginRequest);
   page.enterPage("login");
   page.typeInputById("username", "username");
   page.typeInputById("password", "password");
   page.clickButton("log-in");
+  cy.wait(`@${loginRequest}`);
   cy.window().then(win => {
     expect(win.store.getters.isAuthenticated).to.eq(true);
   });

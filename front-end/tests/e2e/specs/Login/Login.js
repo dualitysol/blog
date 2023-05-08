@@ -7,7 +7,7 @@ const {
 } = require("cypress-cucumber-preprocessor/steps");
 const {
   loginRoute,
-  initAuthRoute,
+  initUserRoute,
   loginHandler,
 } = require("../mocks");
 
@@ -19,7 +19,7 @@ const loginRequest = "login-request";
 //A Registered User navigates to Login page
 
 Given("I am a registered user", () => {
-  initAuthRoute(loginRoute, loginRequest, loginHandler);
+  initUserRoute(loginRoute, loginRequest, loginHandler);
 });
 
 And("I navigate to the {string} page", (pageName) => {

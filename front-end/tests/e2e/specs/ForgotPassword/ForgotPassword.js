@@ -8,7 +8,7 @@ const {
 const {
   forgotPasswordRoute,
   forgotPasswordHandler,
-  initAuthRoute,
+  initUserRoute,
 } = require("../mocks");
 
 const Page = require("../base-spec-class.js");
@@ -16,7 +16,7 @@ const Page = require("../base-spec-class.js");
 const page = new Page("http://localhost:8080");
 
 Given("I am a registered user", () => {
-  initAuthRoute(forgotPasswordRoute, "forgot-password", forgotPasswordHandler);
+  initUserRoute(forgotPasswordRoute, "forgot-password", forgotPasswordHandler);
 
   page.enterPage("/register");
 });

@@ -8,7 +8,7 @@ const {
 } = require("cypress-cucumber-preprocessor/steps");
 const {
   registerRoute,
-  initAuthRoute,
+  initUserRoute,
 } = require("../mocks");
 
 const Page = require("../base-spec-class.js");
@@ -19,7 +19,7 @@ const registerRequest = "register-request";
 before(function () {
   cy.visit("/");
 
-  initAuthRoute(registerRoute, registerRequest);
+  initUserRoute(registerRoute, registerRequest);
 });
 
 Given("I navigate to the {string} page", (pageName) => {

@@ -13,8 +13,12 @@ const successAuthResponse = {
   token: "testToken",
 };
 
-const defaultHandler = (req) => {
-  return req.reply(successAuthResponse);
+const defaultHandler = (req, data = successAuthResponse) => {
+  return req.reply(data);
+}
+
+const messageHandlerBuilder = (message) => (req) => {
+  return req.reply({ message });
 }
 
 const loginHandler = (req) => {
@@ -42,11 +46,11 @@ const forgotPasswordHandler = (req) => {
   }));
 }
 
-const initAuthRoute = (authRoute, requestName, response = defaultHandler) => {
+const initUserRoute = (authRoute, requestName, response = defaultHandler, method = "POST") => {
   cy.server();
   cy.intercept(
     {
-      method: "POST",
+      method,
       url: `/user/${authRoute}`,
     },
     response
@@ -56,8 +60,10 @@ const initAuthRoute = (authRoute, requestName, response = defaultHandler) => {
 module.exports = {
   registerRoute,
   loginRoute,
-  initAuthRoute,
+  initUserRoute,
   loginHandler,
   forgotPasswordRoute,
   forgotPasswordHandler,
+  defaultHandler,
+  messageHandlerBuilder,
 }

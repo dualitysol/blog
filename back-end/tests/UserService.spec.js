@@ -189,5 +189,124 @@ describe("User Service", () => {
         expect(status).toBe(404);
       }
     })
+  }),
+
+  describe("GetAccount", () => {
+    test("Successfully getting account data", async () => {
+      mockModel.findOne.mockReturnValueOnce({
+        id: 3,
+        username: testUsername,
+        email: testEmail,
+      });
+
+      const user = await userService.GetAccount(3);
+
+      expect(user.id).toBe(3);
+      expect(user.email).toBe(testEmail);
+      expect(user.username).toBe(testUsername);
+      expect(mockModel.findOne.mock.calls).toHaveLength(6);
+      expect(mockModel.findOne.mock.calls[5][0]).toEqual({
+        where: { id: 3 },
+        attributes: { exclude: ["password"] },
+      });
+    });
+
+    test("Throws error if user does not exist", async () => {
+      mockModel.findOne.mockReturnValueOnce(null);
+
+      try {
+        await userService.GetAccount(1);
+      } catch ({ message, status }) {        
+        expect(mockModel.findOne.mock.calls).toHaveLength(7);
+        expect(mockModel.findOne.mock.calls[6][0]).toEqual({
+          where: { id: 1 },
+          attributes: { exclude: ["password"] },
+        });
+        expect(message).toBe("No account with that email address exists.");
+        expect(status).toBe(404);
+      }
+    })
+  }),
+
+  describe("SaveAccountInfo", () => {
+    test("Successfull saving info", async () => {
+      const mockUpdate = jest.fn(() => 1);
+      mockModel.findOne.mockReturnValueOnce({
+        id: 4,
+        username: testUsername,
+        email: testEmail,
+        update: mockUpdate,
+      });
+
+      const successful = await userService.SaveAccountInfo({
+        userId: 4,
+        firstName: "firstName",
+        lastName: "lastName",
+        age: "18",
+        gender: "Male",
+        address: "Ukraine",
+        website: "google.com",
+      });
+
+      expect(successful).toBe(true);
+      expect(mockModel.findOne.mock.calls).toHaveLength(8);
+      expect(mockModel.findOne.mock.calls[7][0]).toEqual({
+        where: { id: 4 },
+      });
+      expect(mockUpdate.mock.calls).toHaveLength(1);
+      expect(mockUpdate.mock.calls[0][0]).toEqual({
+        firstName: "firstName",
+        lastName: "lastName",
+        age: 18,
+        gender: "Male",
+        address: "Ukraine",
+        website: "google.com",
+      });
+    });
+
+    test("Throws if gender is incorrect", async () => {
+      mockModel.findOne.mockReturnValueOnce({
+        id: 4,
+        username: testUsername,
+        email: testEmail,
+      });
+
+      try {
+        await userService.SaveAccountInfo({
+          userId: 4,
+          firstName: "firstName",
+          lastName: "lastName",
+          age: "18",
+          gender: "Bi-gender",
+          address: "Ukraine",
+          website: "google.com",
+        });
+      } catch ({ message }) {
+        expect(message).toBe('Gender could be oly "male" or "female"!');
+      }
+    });
+
+    test("Throws if age is not a number", async () => {
+      mockModel.findOne.mockReturnValueOnce({
+        id: 5,
+        username: testUsername,
+        email: testEmail,
+      });
+
+      try {
+        await userService.SaveAccountInfo({
+          userId: 5,
+          firstName: "firstName",
+          lastName: "lastName",
+          age: "twenyone",
+          gender: "Male",
+          address: "Ukraine",
+          website: "google.com",
+        });
+      } catch ({ message, status }) {
+        expect(message).toBe("Age could be only an interger!");
+        expect(status).toBe(400);
+      }
+    });
   })
 });

@@ -23,6 +23,12 @@ module.exports = class Page {
     }
   }
 
+  shouldSeeHeading(heading) {
+    this.getElementByIdName("span", "heading").invoke("text").should((text) => {
+      expect(text).to.eq(heading);
+    });
+  }
+
   getButton(buttonId) {
     return cy.get("button#" + buttonId);
   }
