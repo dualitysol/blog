@@ -36,6 +36,11 @@ const routes = [
     name: "my-profile",
     component: () => import("../views/ProfileView.vue"),
   },
+  {
+    path: "/reset-password",
+    name: "reset-password",
+    component: () => import("../views/ResetPassword.vue"),
+  },
 ];
 
 const router = createRouter({
@@ -48,7 +53,8 @@ router.beforeEach((to, from, next) => {
   const toLogin = to.path === "/login";
   const toRegister = to.path === "/registration";
   const toRestorePassword = to.path === "/forgot-password";
-  const toAuth = toLogin || toRegister || toRestorePassword;
+  const toResetPassword = to.path === "/reset-password";
+  const toAuth = toLogin || toRegister || toRestorePassword || toResetPassword;
 
   if (toAuth) return next();
 

@@ -66,10 +66,19 @@ export async function saveProfileInfo(
   return message;
 }
 
+export async function resetPassword(password) {
+  const { data: success } = await axios.post("/user/reset-password", {
+    password,
+  });
+
+  return success;
+}
+
 export default {
   setToken,
   register,
   login,
   forgotPassword,
   getProfileById,
+  saveProfileInfo,
 };

@@ -39,7 +39,7 @@ const validateAge = (age) => {
 
     throw err;
   }
-}
+};
 
 class UserService {
   constructor(model, services) {
@@ -132,6 +132,17 @@ class UserService {
     }
 
     return "Reset password link was successfully sent.";
+  }
+
+  async UpdatePassword(userId, password) {
+    const filter = { where: { id: userId } };
+    const user = !!userId && (await this.model.findOne(filter));
+
+    checkUserExists(user);
+
+    const successful = await user.update({ password });
+
+    return !!successful;
   }
 
   /**

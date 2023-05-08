@@ -27,6 +27,14 @@ class User extends Model {
 
     return super.create(payload);
   }
+
+  async update(payload) {
+    if (payload.password) {
+      payload.password = await hash(payload.password, 10);
+    }
+
+    return super.update(payload);
+  }
 }
 
 User.init(

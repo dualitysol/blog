@@ -65,10 +65,12 @@ const UserController = {
     try {
       const userId = parseInt(req.params.userId);
       const canUpdate = req.userData.id === userId;
-      const result = canUpdate && await userService.SaveAccountInfo({
-        userId: req.userData.id,
-        ...req.body,
-      });
+      const result =
+        canUpdate &&
+        (await userService.SaveAccountInfo({
+          userId: req.userData.id,
+          ...req.body,
+        }));
 
       if (!result) {
         const error = new Error("Error while updating account info");
@@ -102,7 +104,27 @@ const UserController = {
 
       return res.status(200).json(user);
     } catch ({ message, status }) {
-      return res.status(500).json({ message });
+      return res.status(status || 500).json({ message });
+    }
+  },
+
+  ResetPassword: async (req, res) => {
+    try {
+      const { password } = req.body;
+
+      if (!password) {
+        const error = new Error("Provide password!");
+
+        error.status = 400;
+
+        throw error;
+      }
+
+      const success = await userService.UpdatePassword(req.userId, password);
+
+      return res.status(200).json({ success });
+    } catch ({ message, status }) {
+      return res.status(status || 500).json({ message });
     }
   },
 };
