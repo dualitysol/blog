@@ -4,8 +4,9 @@ import store from "@/store";
 
 const routes = [
   {
-    path: "/",
+    path: "/home",
     name: "home",
+    alias: "/",
     component: HomeView,
   },
   {
@@ -25,6 +26,16 @@ const routes = [
     name: "forgot-password",
     component: () => import("../views/ForgotPassword.vue"),
   },
+  {
+    path: "/profile/:profileId",
+    name: "profile-page",
+    component: () => import("../views/ProfileView.vue"),
+  },
+  {
+    path: "/my-profile",
+    name: "my-profile",
+    component: () => import("../views/ProfileView.vue"),
+  },
 ];
 
 const router = createRouter({
@@ -38,7 +49,7 @@ router.beforeEach((to, from, next) => {
   const toRegister = to.path === "/registration";
   const toRestorePassword = to.path === "/forgot-password";
   const toAuth = toLogin || toRegister || toRestorePassword;
-  console.log(toAuth, isAuthenticated, to);
+
   if (toAuth) return next();
 
   if (!isAuthenticated) {

@@ -32,6 +32,15 @@
         >
           Forgot Password
         </v-btn>
+        <v-btn
+          style="margin-left: 10px"
+          variant="outlined"
+          density="compact"
+          color="blue-darken-1"
+          @click="$router.push('/registration')"
+        >
+          Register
+        </v-btn>
       </v-form>
     </v-container>
 
@@ -43,6 +52,7 @@
         id="log-in"
         color="success"
         variant="tonal"
+        size="large"
         block
         @click="login"
         :disabled="!loginEnadled"

@@ -1,5 +1,46 @@
 const jwt = require("jsonwebtoken");
 
+/**
+ * @throws { Error } if user has no id which means it does not exist
+ */
+const checkUserExists = (user) => {
+  if (!!user === false || !!user.id === false) {
+    const err = new Error("No account with that email address exists.");
+
+    err.status = 404;
+
+    throw err;
+  }
+};
+
+/**
+ * @throws { Error } if fgender is not equal to "male", "female", or null
+ */
+const validateGender = (gender = "") => {
+  if (!!gender !== false && gender !== "Male" && gender !== "Female") {
+    const err = new Error('Gender could be oly "male" or "female"!');
+
+    err.status = 400;
+
+    throw err;
+  }
+};
+
+const validateAge = (age) => {
+  try {
+    if (!Number.isInteger(parseInt(age))) {
+      throw new Error();
+    }
+    return;
+  } catch (error) {
+    const err = new Error("Age could be only an interger!");
+
+    err.status = 400;
+
+    throw err;
+  }
+}
+
 class UserService {
   constructor(model, services) {
     this.model = model;
@@ -91,6 +132,53 @@ class UserService {
     }
 
     return "Reset password link was successfully sent.";
+  }
+
+  /**
+   * @param { String } firstName
+   * @param { String } lastName
+   * @param { Number } age
+   * @param { Enum<String> } gender - "male" or "female" only
+   * @param { String } address
+   * @param { String } website
+   * @return { Boolean }
+   */
+  async SaveAccountInfo({
+    userId,
+    firstName,
+    lastName,
+    age,
+    gender,
+    address,
+    website,
+  }) {
+    const filter = { where: { id: userId } };
+    const user = !!userId && (await this.model.findOne(filter));
+
+    checkUserExists(user);
+    validateGender(gender);
+    validateAge(age);
+
+    const successful = await user.update({
+      firstName,
+      lastName,
+      age: parseInt(age),
+      gender,
+      address,
+      website,
+    });
+
+    return !!successful;
+  }
+
+  async GetAccount(userId) {
+    const attributes = { exclude: ["password"] };
+    const filter = { where: { id: userId }, attributes };
+    const user = !!userId && (await this.model.findOne(filter));
+
+    checkUserExists(user);
+
+    return user;
   }
 }
 

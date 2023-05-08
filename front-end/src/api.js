@@ -43,8 +43,33 @@ export async function forgotPassword(email) {
   return message;
 }
 
+export async function getProfileById(profileId) {
+  const { data: profile } = await axios.get("/user/" + profileId);
+  return profile;
+}
+
+export async function saveProfileInfo(
+  profileId,
+  { firstName, lastName, age, gender, address, website }
+) {
+  const {
+    data: { message },
+  } = await axios.patch("/user/" + profileId, {
+    firstName,
+    lastName,
+    age,
+    gender,
+    address,
+    website,
+  });
+
+  return message;
+}
+
 export default {
   setToken,
   register,
   login,
+  forgotPassword,
+  getProfileById,
 };

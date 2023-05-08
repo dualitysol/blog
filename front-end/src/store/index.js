@@ -99,6 +99,7 @@ const store = createStore({
 
 if (window.Cypress) {
   window.store = store;
+  window.$store = store;
 }
 
 export default store;

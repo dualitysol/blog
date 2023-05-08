@@ -15,6 +15,16 @@
     <v-spacer />
 
     <v-btn
+      id="my-profile-link"
+      v-if="isLoggedIn"
+      @click="goToMyProfile"
+      stacked
+    >
+      <v-icon icon="mdi-account-circle-outline"></v-icon>
+      My Profile
+    </v-btn>
+
+    <v-btn
       id="login-link"
       v-if="!isLoggedIn"
       @click="goToLogin"
@@ -38,7 +48,7 @@ import { defineComponent } from "vue";
 export default defineComponent({
   methods: {
     goToLogin() {
-      this.$router.push("/auth");
+      this.$router.push("/login");
     },
     goToHome() {
       this.$router.push({ name: "home" });
@@ -49,6 +59,9 @@ export default defineComponent({
     logout() {
       this.$store.dispatch("logOut");
       this.$router.push("/login");
+    },
+    goToMyProfile() {
+      this.$router.push("/my-profile");
     },
   },
 

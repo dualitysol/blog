@@ -73,6 +73,29 @@ User.init(
         },
       },
     },
+    firstName: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    lastName: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    age: {
+      type: DataTypes.NUMBER,
+      allowNull: true,
+    },
+    gender: {
+      type: DataTypes.STRING,
+    },
+    address: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    website: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
   },
   { sequelize: database }
 );
