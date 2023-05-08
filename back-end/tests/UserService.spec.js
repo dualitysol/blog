@@ -309,4 +309,32 @@ describe("User Service", () => {
       }
     });
   })
+
+  describe("UpdatePassword", () => {
+    test("Updated password", async () => {
+      const mockUpdate = jest.fn(() => 1);
+
+      mockModel.findOne.mockReturnValueOnce({
+        id: 4,
+        update: mockUpdate,
+      });
+
+      const succesfull = await userService.UpdatePassword(4, "password");
+
+      expect(succesfull).toBe(true);
+      expect(mockUpdate.mock.calls).toHaveLength(1);
+      expect(mockUpdate.mock.calls[0][0]).toEqual({ password: "password" });
+    });
+
+    test("Throws is user does not exist", async () => {
+      mockModel.findOne.mockReturnValueOnce(null);
+
+      try {
+        await userService.UpdatePassword(4, "password");
+      } catch ({ message, status }) {
+        expect(message).toBe("No account with that email address exists.");
+        expect(status).toBe(404);
+      }
+    });
+  })
 });
