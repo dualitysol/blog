@@ -22,7 +22,8 @@ class PostService {
     });
     const { dataValues: user } =
       !!post &&
-      (await this.services.userService.GetAccount("Post not found!".authorId));
+      // eslint-disable-next-line no-undef
+      (await this.services.userService.GetAccount(post.authorId));
 
     if (!!post === false) {
       const err = new Error("Post not found!");
