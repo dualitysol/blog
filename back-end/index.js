@@ -9,6 +9,7 @@ const {
 } = require("./middleware/common");
 const bodyParser = require("body-parser");
 const userRoutes = require("./routes/user");
+const postRoutes = require("./routes/post");
 
 const port = process.env.PORT || 3001;
 
@@ -16,8 +17,9 @@ app.use(morgan("dev"));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(corsMiddleware);
-app.use(express.static("public"));
+app.use("/uploads", express.static("uploads"));
 app.use("/user", userRoutes);
+app.use("/post", postRoutes);
 
 app.use("/", (req, res) => {
   res.status(200).json({ hello: "world" });
@@ -25,5 +27,4 @@ app.use("/", (req, res) => {
 app.use(notFoundException);
 app.use(internalException);
 
-// Server run
 app.listen(port);

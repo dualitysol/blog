@@ -41,6 +41,16 @@ const routes = [
     name: "reset-password",
     component: () => import("../views/ResetPassword.vue"),
   },
+  {
+    path: "/add-new-post",
+    name: "add-new-post",
+    component: () => import("../views/AddPostView.vue"),
+  },
+  {
+    path: "/blog-details/:postId",
+    name: "blog-details",
+    component: () => import("../views/PostView.vue"),
+  },
 ];
 
 const router = createRouter({

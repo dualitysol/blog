@@ -74,6 +74,33 @@ export async function resetPassword(password) {
   return success;
 }
 
+export async function addPost(title, description, content, picture) {
+  const {
+    data: { message },
+  } = await axios.postForm("/post", {
+    title,
+    content,
+    picture,
+    description,
+  });
+
+  return message;
+}
+
+export async function getPosts() {
+  const {
+    data: { posts },
+  } = await axios.get("/post");
+
+  return posts;
+}
+
+export async function getPost(postId) {
+  const { data: post } = await axios.get("/post/" + postId);
+
+  return post;
+}
+
 export default {
   setToken,
   register,

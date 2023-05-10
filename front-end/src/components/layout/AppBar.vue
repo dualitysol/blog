@@ -6,11 +6,24 @@
     fixed
     app
   >
-    <v-app-bar-title> Blog </v-app-bar-title>
+    <v-app-bar-title>
+      <v-icon icon="mdi-script-outline" />
+      Blog
+    </v-app-bar-title>
 
     <v-btn id="home-link" @click="goToHome">Home</v-btn>
 
     <v-btn id="dashboard-link" @click="goToAddPost">Dashboard</v-btn>
+
+    <v-btn
+      id="add-new-post-link"
+      @click="goToAddPost"
+      color="blue"
+      variant="tonal"
+    >
+      <v-icon icon="mdi-plus-circle-outline" />
+      New Post
+    </v-btn>
 
     <v-spacer />
 
@@ -54,7 +67,7 @@ export default defineComponent({
       this.$router.push({ name: "home" });
     },
     goToAddPost() {
-      this.$router.push("/add-post");
+      this.$router.push("/add-new-post");
     },
     logout() {
       this.$store.dispatch("logOut");
