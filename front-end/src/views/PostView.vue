@@ -26,6 +26,8 @@
         <v-row>
           <post-content>{{ content }}</post-content>
         </v-row>
+
+        <comment-section :postId="id" />
       </v-col>
     </v-row>
   </v-container>
@@ -37,12 +39,14 @@ import { getPost, initErrorHandler } from "@/api";
 import ProfileCard from "@/components/profile/ProfileCard.vue";
 import PostHeading from "@/components/post/PostHeading.vue";
 import PostContent from "@/components/post/PostContent.vue";
+import CommentSection from "@/components/comment/CommentSection.vue";
 
 export default defineComponent({
   components: {
     ProfileCard,
     PostHeading,
     PostContent,
+    CommentSection,
   },
 
   data() {

@@ -101,6 +101,25 @@ export async function getPost(postId) {
   return post;
 }
 
+export async function getComments(postId) {
+  const {
+    data: { comments },
+  } = await axios.get("/comment/" + postId);
+
+  return comments;
+}
+
+export async function createComment(postId, name, content) {
+  const {
+    data: { message },
+  } = await axios.post("/comment/" + postId, {
+    name,
+    message: content,
+  });
+
+  return message;
+}
+
 export default {
   setToken,
   register,

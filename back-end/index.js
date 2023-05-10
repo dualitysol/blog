@@ -10,6 +10,7 @@ const {
 const bodyParser = require("body-parser");
 const userRoutes = require("./routes/user");
 const postRoutes = require("./routes/post");
+const commentRoutes = require("./routes/comment");
 
 const port = process.env.PORT || 3001;
 
@@ -20,7 +21,7 @@ app.use(corsMiddleware);
 app.use("/uploads", express.static("uploads"));
 app.use("/user", userRoutes);
 app.use("/post", postRoutes);
-
+app.use("/comment", commentRoutes);
 app.use("/", (req, res) => {
   res.status(200).json({ hello: "world" });
 });
