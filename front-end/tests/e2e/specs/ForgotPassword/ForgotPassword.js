@@ -15,10 +15,12 @@ const Page = require("../base-spec-class.js");
 
 const page = new Page("http://localhost:8080");
 
+// before(() => {
+// })
+
 Given("I am a registered user", () => {
   initUserRoute(forgotPasswordRoute, "forgot-password", forgotPasswordHandler);
-
-  page.enterPage("/register");
+  page.enterPage("/registration");
 });
 
 And("I navigate to the {string} page", (pageName) => {

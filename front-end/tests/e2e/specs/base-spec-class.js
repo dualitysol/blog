@@ -8,7 +8,7 @@ module.exports = class Page {
   }
 
   getElementByIdName(elementName, inputName) {
-    const inputId = inputName.toLowerCase().replace(" ", "-");
+    const inputId = inputName.toLowerCase().replace(/ /g, "-");
     return cy.get(elementName + "#" + inputId);
   }
 
@@ -35,7 +35,7 @@ module.exports = class Page {
 
   clickButton(btnName) {
     // maybe span with class v-btn__content
-    const buttonId = btnName.toLowerCase().replace(" ", "-");
+    const buttonId = btnName.toLowerCase().replace(/ /g, "-");
     const button = this.getButton(buttonId);
 
     button.click();
@@ -54,12 +54,12 @@ module.exports = class Page {
   }
 
   checkPageUrl(pageName) {
-    const url = this.baseUrl + "/" + pageName.toLowerCase().replace(" ", "-");
+    const url = this.baseUrl + "/" + pageName.toLowerCase().replace(/ /g, "-");
     cy.url().should("be.equal", url);
   }
 
   checkBtnLinksExists(linkName) {
-    const buttonId = linkName.toLowerCase().replace(" ", "-") + "-link";
+    const buttonId = linkName.toLowerCase().replace(/ /g, "-") + "-link";
     const button = this.getButton(buttonId);
 
     button.should("be.visible");

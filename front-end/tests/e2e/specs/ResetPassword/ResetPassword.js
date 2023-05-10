@@ -13,15 +13,11 @@ const Page = require("../base-spec-class.js");
 
 const page = new Page("http://localhost:8080");
 
-before(function () {
-  initUserRoute("reset-password", "reset",(req) => req.reply((res) => res.send({
-    status: 401,
-    message: "Password reset token is invalid or has expired."
-  })));
-});
-
-
 When("I navigate to the {string} page", (pageName) => {
+  initUserRoute("reset-password", "reset",(req) => req.reply(401, {
+    message: "Password reset token is invalid or has expired."
+  }));
+
   const url = pageName.replace(" ", "-") + "?token=invalidToken";
 
   page.enterPage(url);

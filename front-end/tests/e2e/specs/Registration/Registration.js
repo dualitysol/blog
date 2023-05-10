@@ -20,6 +20,10 @@ before(function () {
   cy.visit("/");
 
   initUserRoute(registerRoute, registerRequest);
+  cy.intercept({
+    url: "http://localhost:3001/post",
+    method: "GET"
+  }, { posts: [] })
 });
 
 Given("I navigate to the {string} page", (pageName) => {

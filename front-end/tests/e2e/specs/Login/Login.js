@@ -5,11 +5,6 @@ const {
   And,
   Then,
 } = require("cypress-cucumber-preprocessor/steps");
-const {
-  loginRoute,
-  initUserRoute,
-  loginHandler,
-} = require("../mocks");
 
 const Page = require("../base-spec-class.js");
 
@@ -19,7 +14,34 @@ const loginRequest = "login-request";
 //A Registered User navigates to Login page
 
 Given("I am a registered user", () => {
-  initUserRoute(loginRoute, loginRequest, loginHandler);
+  cy.intercept({
+    url: "http://localhost:3001/post",
+    method: "GET"
+  }, { posts: [] })
+  const testUsername = "asdf.asdf";
+  const testEmail = "asdf.asdf@example.com";
+  const testPassword = "Asdf@1234";
+  const successAuthResponse = {
+    userData: {
+      id: 1,
+      username: testUsername,
+      email: testEmail,
+    },
+    token: "testToken",
+  };
+
+  cy.intercept("http://localhost:3001/user/signin", (req) => {
+    const correctUsername = req.body.username === testUsername;
+    const correctPassword = req.body.password === testPassword;
+
+    if (correctUsername && correctPassword) {
+      return req.reply(successAuthResponse);
+    }
+
+    req.reply(401, {
+      message: "Invalid username/password, Try again!"
+    });
+  }).as(loginRequest);
 });
 
 And("I navigate to the {string} page", (pageName) => {

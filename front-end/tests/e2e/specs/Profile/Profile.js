@@ -24,6 +24,10 @@ Given("I am a logged in user", () => {
     username: "username",
     email: "user@email.com",
   };
+  cy.intercept({
+    url: "http://localhost:3001/post",
+    method: "GET"
+  }, { posts: [] })
   initUserRoute(loginRoute, "login");
   initUserRoute("1", "get-user", (req) => defaultHandler(req, userData), "GET");
   initUserRoute("1", "update-user", messageHandler, "PATCH");
