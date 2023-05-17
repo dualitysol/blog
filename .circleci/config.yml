@@ -31,22 +31,10 @@ jobs:
             npm i
             ls
             pwd
-      - run:
-          name: Run e2e tests
-          command: |
-            ls
-            pwd
-            cd ./front-end
-            ls
-            npm run test:cy
-
 workflows:
-  # Below is the definition of your workflow.
-  # Inside the workflow, you provide the jobs you want to run, e.g this workflow runs the build-and-test job above.
-  # CircleCI will run this workflow on every commit.
-  # For more details on extending your workflow, see the configuration docs: https://circleci.com/docs/2.0/configuration-reference/#workflows
   sample:
     jobs:
-      - front-end-test
-      # For running simple node tests, you could optionally use the node/test job from the orb to replicate and replace the job above in fewer lines.
-      # - node/test
+      # - front-end-test
+      - cypress/run:
+          install-command: cd ./frotn-end && npm install && echo hello
+          start-command: npm run test:e2e
