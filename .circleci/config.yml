@@ -30,7 +30,9 @@ jobs:
             npm i
       - run:
           name: Run e2e tests
-          command: npm run test:e2e
+          command: |
+            cd ./front-end
+            npm run test:e2e
 
 workflows:
   # Below is the definition of your workflow.
