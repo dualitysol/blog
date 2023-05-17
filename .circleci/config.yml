@@ -24,23 +24,20 @@ jobs:
       # Next, the node orb's install-packages step will install the dependencies from a package.json.
       # The orb install-packages step will also automatically cache them for faster future runs.
       - run:
-        name: Run docker test
-        command: sh run_me.sh
-      # - run:
-      #     name: Install deps
-      #     command: |
-      #       cd ./front-end
-      #       npm i
-      #       ls
-      #       pwd
-      # - run:
-      #     name: Run e2e tests
-      #     command: |
-      #       ls
-      #       pwd
-      #       cd ./front-end
-      #       ls
-      #       Xvfb -screen 0 1024x768x24 :99 & export DISPLAY=:99 && npx cypress run
+          name: Install deps
+          command: |
+            cd ./front-end
+            npm i
+            ls
+            pwd
+      - run:
+          name: Run e2e tests
+          command: |
+            ls
+            pwd
+            cd ./front-end
+            ls
+            Xvfb -screen 0 1024x768x24 :99 & export DISPLAY=:99 && npx cypress run
 
 workflows:
   # Below is the definition of your workflow.
