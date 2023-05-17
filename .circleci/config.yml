@@ -37,7 +37,7 @@ jobs:
             pwd
             cd ./front-end
             ls
-            npm run test:e2e
+            Xvfb -screen 0 1024x768x24 :99 & export DISPLAY=:99 && npx cypress run
 
 workflows:
   # Below is the definition of your workflow.
