@@ -28,10 +28,15 @@ jobs:
           command: |
             cd ./front-end
             npm i
+            ls
+            pwd
       - run:
           name: Run e2e tests
           command: |
+            ls
+            pwd
             cd ./front-end
+            ls
             npm run test:e2e
 
 workflows:
